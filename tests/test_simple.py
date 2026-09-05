@@ -1,13 +1,13 @@
 from pathlib import Path
-import openpyxl_simple as ops
+import openpyxl_simple as oxs
 from openpyxl_simple.decorator import deco_fname_check, deco_to_path
 from openpyxl_simple.encoding import guess_utf_encoding
 from openpyxl_simple.table import collect_header, tie_key_value
 
 
 def test_exports():
-    for name in ops.__all__:
-        assert hasattr(ops, name), f"Missing {name}"
+    for name in oxs.__all__:
+        assert hasattr(oxs, name), f"Missing {name}"
 
 
 def test_deco_to_path():

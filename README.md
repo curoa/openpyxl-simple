@@ -19,17 +19,17 @@ uv add openpyxl-simple
 ### Read Data
 
 ```python
-import openpyxl_simple as ops
+import openpyxl_simple as oxs
 
 # Load as list of dictionaries (using the first row as header keys)
-records = ops.load_as_dict("sample.xlsx")
+records = oxs.load_as_dict("sample.xlsx")
 # [
 #     {"Name": "Alice", "Age": 30, "Website": "https://example.com/alice", "Joined": datetime.datetime(2023, 1, 15, 0, 0)},
 #     {"Name": "Bob", "Age": 25, "Website": "https://example.com/bob", "Joined": datetime.datetime(2024, 6, 1, 0, 0)},
 # ]
 
 # Load as list of lists
-rows = ops.load_as_list("sample.xlsx")
+rows = oxs.load_as_list("sample.xlsx")
 # [
 #     ["Name", "Age", "Website", "Joined"],
 #     ["Alice", 30, "https://example.com/alice", datetime.datetime(2023, 1, 15, 0, 0)],
@@ -41,7 +41,7 @@ rows = ops.load_as_list("sample.xlsx")
 
 ```python
 from datetime import datetime
-import openpyxl_simple as ops
+import openpyxl_simple as oxs
 
 # Write list of dicts
 header = ["Name", "Age", "Website", "Joined"]
@@ -49,7 +49,7 @@ records = [
     {"Name": "Alice", "Age": 30, "Website": "https://example.com/alice", "Joined": datetime(2023, 1, 15)},
     {"Name": "Bob", "Age": 25, "Website": "https://example.com/bob", "Joined": datetime(2024, 6, 1)},
 ]
-ops.write_dict("sample.xlsx", header, records)
+oxs.write_dict("sample.xlsx", header, records)
 
 # Write list of lists
 data = [
@@ -57,7 +57,7 @@ data = [
     ["Alice", 30, "https://example.com/alice", datetime(2023, 1, 15)],
     ["Bob", 25, "https://example.com/bob", datetime(2024, 6, 1)],
 ]
-ops.write_ll("sample.xlsx", data)
+oxs.write_ll("sample.xlsx", data)
 ```
 
 ## Advanced Usage
