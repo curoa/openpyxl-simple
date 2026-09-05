@@ -1,3 +1,4 @@
+import datetime
 import openpyxl
 from openpyxl_simple.reader import (
     load_as_dict,
@@ -91,3 +92,28 @@ def test_write_dispatcher(tmp_path):
     csv_dict = tmp_path / "out_dict.csv"
     write_dict(str(csv_dict), ["col"], [{"col": "val"}])
     assert load_as_dict(str(csv_dict)) == [{"col": "val"}]
+
+
+def test_write_and_read_datetime(tmp_path):
+    fpath = tmp_path / "datetime_test.xlsx"
+    now = datetime.datetime(2026, 9, 5, 12, 30, 45)
+    today = datetime.date(2026, 9, 5)
+
+    data = [
+        ["datetime", "date"],
+        [now, today],
+    ]
+    write_xlsx_ll(str(fpath), data)
+
+    result_list = load_xlsx_as_list(str(fpath))
+    assert result_list[0] == ["datetime", "date"]
+    assert result_list[1][0] == now
+    assert result_list[1][1] == datetime.datetime(2026, 9, 5, 0, 0)
+
+    dict_data = [{"datetime": now, "date": today}]
+    dict_fpath = tmp_path / "datetime_dict.xlsx"
+    write_xlsx_dict(str(dict_fpath), ["datetime", "date"], dict_data)
+
+    result_dict = load_xlsx_as_dict(str(dict_fpath))
+    assert result_dict[0]["datetime"] == now
+    assert result_dict[0]["date"] == datetime.datetime(2026, 9, 5, 0, 0)

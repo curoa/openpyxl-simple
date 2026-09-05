@@ -18,35 +18,34 @@ SAMPLE_CSV = TEST_DIR / "sample.csv"
 
 
 def test_read_ws_as_list():
-    wb = openpyxl.Workbook()
+    wb = openpyxl.load_workbook(SAMPLE_XLSX)
     ws = wb.active
-    ws.append(["A", "B", "C"])
-    ws.append([1, 2, 3])
-    ws.append(["x", "y", "z"])
-
     result = load_ws_as_list(ws)
-    assert result == [["A", "B", "C"], [1, 2, 3], ["x", "y", "z"]]
+    assert result == [["number"], ["AE3803"], ["AA5100"], ["NT4201"]]
 
 
 def test_read_ws_as_dict():
-    wb = openpyxl.Workbook()
+    wb = openpyxl.load_workbook(SAMPLE_XLSX)
     ws = wb.active
-    ws.append(["id", "name", "age"])
-    ws.append([1, "Alice", 20])
-    ws.append([2, "Bob", 30])
-
     result = load_ws_as_dict(ws)
     assert result == [
-        {"id": 1, "name": "Alice", "age": 20},
-        {"id": 2, "name": "Bob", "age": 30},
+        {"number": "AE3803"},
+        {"number": "AA5100"},
+        {"number": "NT4201"},
     ]
 
 
 def test_read_xlsx():
-    assert load_xlsx_as_list(str(SAMPLE_XLSX)) == [["col1", "col2"], ["val1", "val2"]]
-    assert load_xlsx_as_dict(str(SAMPLE_XLSX)) == [{"col1": "val1", "col2": "val2"}]
-    assert load_xlsx_as_list(str(SAMPLE_XLSX), sheet_name="CustomSheet") == [["name", "score"], ["charlie", 95]]
-    assert load_xlsx_as_dict(str(SAMPLE_XLSX), sheet_name="CustomSheet") == [{"name": "charlie", "score": 95}]
+    assert load_xlsx_as_list(str(SAMPLE_XLSX)) == [["number"], ["AE3803"], ["AA5100"], ["NT4201"]]
+    assert load_xlsx_as_dict(str(SAMPLE_XLSX)) == [
+        {"number": "AE3803"},
+        {"number": "AA5100"},
+        {"number": "NT4201"},
+    ]
+    assert load_xlsx_as_list(str(SAMPLE_XLSX), sheet_name="アニメ") == [
+        ["はたらく細胞", "2018年7月8日"],
+        ["化物語", "2009年7月3日"],
+    ]
 
 
 def test_read_xlsx_data_only():
@@ -78,10 +77,9 @@ def test_read_xlsx_data_only():
 
 
 def test_read_csv():
-    assert load_csv_as_list(str(SAMPLE_CSV), encoding="utf-16") == [["id", "title"], ["10", "itemA"], ["20", "itemB"]]
-    assert load_csv_as_dict(str(SAMPLE_CSV), encoding="utf-16") == [
-        {"id": "10", "title": "itemA"},
-        {"id": "20", "title": "itemB"},
+    assert load_csv_as_list(str(SAMPLE_CSV), encoding="utf-16") == [
+        ["はたらく細胞", "2018年7月8日"],
+        ["化物語", "2009年7月3日"],
     ]
 
 
