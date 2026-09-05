@@ -14,12 +14,10 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          version: "latest"
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
       - name: Set up Python
         run: uv python install
