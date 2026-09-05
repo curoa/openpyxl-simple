@@ -29,3 +29,8 @@ dependencies = [
 Homepage = "https://github.com/curoa/openpyxl-simple"
 Repository = "https://github.com/curoa/openpyxl-simple"
 Issues = "https://github.com/curoa/openpyxl-simple/issues"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
