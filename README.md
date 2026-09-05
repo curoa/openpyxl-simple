@@ -50,6 +50,9 @@ records = [
 ops.write_dict("output.xlsx", header, records)
 ```
 
+TODO: use the same as sample data in sample code
+TODO: usege about data only, style, url, datetime
+
 ## License
 
 MIT
