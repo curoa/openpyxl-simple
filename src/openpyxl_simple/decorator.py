@@ -1,53 +1,25 @@
 from functools import wraps
-from inspect import getfullargspec, unwrap
+from inspect import getfullargspec, signature, unwrap
 from pathlib import Path
 
 def deco_to_path(fn_or_arg_name=None, arg_name="fpath"):
-    if callable(fn_or_arg_name):
-        func = fn_or_arg_name
-        target_arg_name = "fpath"
-        argspec = getfullargspec(unwrap(func))
-        arg_index = argspec.args.index(target_arg_name)
-
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            if arg_index < len(args):
-                val = args[arg_index]
-                if isinstance(val, str):
-                    args = list(args)
-                    args[arg_index] = Path(val)
-                    args = tuple(args)
-            elif target_arg_name in kwargs:
-                val = kwargs[target_arg_name]
-                if isinstance(val, str):
-                    kwargs[target_arg_name] = Path(val)
-            return func(*args, **kwargs)
-
-        return wrapper
-
     target_arg_name = fn_or_arg_name if isinstance(fn_or_arg_name, str) else arg_name
 
     def _deco_to_path(func):
-        argspec = getfullargspec(unwrap(func))
-        arg_index = argspec.args.index(target_arg_name)
+        sig = signature(func)
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            if arg_index < len(args):
-                val = args[arg_index]
-                if isinstance(val, str):
-                    args = list(args)
-                    args[arg_index] = Path(val)
-                    args = tuple(args)
-            elif target_arg_name in kwargs:
-                val = kwargs[target_arg_name]
-                if isinstance(val, str):
-                    kwargs[target_arg_name] = Path(val)
-            return func(*args, **kwargs)
+            bound = sig.bind(*args, **kwargs)
+            bound.apply_defaults()
+            val = bound.arguments.get(target_arg_name)
+            if isinstance(val, str):
+                bound.arguments[target_arg_name] = Path(val)
+            return func(*bound.args, **bound.kwargs)
 
         return wrapper
 
-    return _deco_to_path
+    return _deco_to_path(fn_or_arg_name) if callable(fn_or_arg_name) else _deco_to_path
 
 def deco_fname_check(ftype, arg_name="fpath"):
     def _deco_fname_check(f):

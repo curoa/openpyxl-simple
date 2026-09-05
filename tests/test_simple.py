@@ -268,6 +268,13 @@ def test_deco_to_path():
     assert isinstance(dummy_filepath("bar.txt"), type(Path("bar.txt")))
     assert isinstance(dummy_filepath(filepath="bar.txt"), type(Path("bar.txt")))
 
+    @deco_to_path
+    def dummy_default(fpath="default.txt"):
+        return fpath
+
+    assert isinstance(dummy_default(), type(Path("default.txt")))
+    assert dummy_default() == Path("default.txt")
+
 def test_deco_fname_check():
     @deco_fname_check("xlsx")
     def dummy_save(fpath):
