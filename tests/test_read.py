@@ -1,4 +1,5 @@
 import csv
+from pathlib import Path
 import openpyxl
 from openpyxl_simple.reader import (
     load_as_dict,
@@ -10,6 +11,10 @@ from openpyxl_simple.reader import (
     load_xlsx_as_dict,
     load_xlsx_as_list,
 )
+
+TEST_DIR = Path(__file__).parent
+TEST_XLSX = TEST_DIR / "test.xlsx"
+TEST_CSV = TEST_DIR / "test.csv"
 
 
 def test_read_ws_as_list():
@@ -37,36 +42,16 @@ def test_read_ws_as_dict():
     ]
 
 
-def test_read_xlsx(tmp_path):
-    fpath = tmp_path / "test.xlsx"
-    wb = openpyxl.Workbook()
-    ws1 = wb.active
-    ws1.title = "Sheet1"
-    ws1.append(["col1", "col2"])
-    ws1.append(["val1", "val2"])
-
-    ws2 = wb.create_sheet(title="CustomSheet")
-    ws2.append(["name", "score"])
-    ws2.append(["charlie", 95])
-    wb.save(fpath)
-    wb.close()
-
-    assert load_xlsx_as_list(str(fpath)) == [["col1", "col2"], ["val1", "val2"]]
-    assert load_xlsx_as_dict(str(fpath)) == [{"col1": "val1", "col2": "val2"}]
-    assert load_xlsx_as_list(str(fpath), sheet_name="CustomSheet") == [["name", "score"], ["charlie", 95]]
-    assert load_xlsx_as_dict(str(fpath), sheet_name="CustomSheet") == [{"name": "charlie", "score": 95}]
+def test_read_xlsx():
+    assert load_xlsx_as_list(str(TEST_XLSX)) == [["col1", "col2"], ["val1", "val2"]]
+    assert load_xlsx_as_dict(str(TEST_XLSX)) == [{"col1": "val1", "col2": "val2"}]
+    assert load_xlsx_as_list(str(TEST_XLSX), sheet_name="CustomSheet") == [["name", "score"], ["charlie", 95]]
+    assert load_xlsx_as_dict(str(TEST_XLSX), sheet_name="CustomSheet") == [{"name": "charlie", "score": 95}]
 
 
-def test_read_csv(tmp_path):
-    fpath = tmp_path / "test.csv"
-    with open(fpath, "w", encoding="utf-16", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["id", "title"])
-        writer.writerow(["10", "itemA"])
-        writer.writerow(["20", "itemB"])
-
-    assert load_csv_as_list(str(fpath), encoding="utf-16") == [["id", "title"], ["10", "itemA"], ["20", "itemB"]]
-    assert load_csv_as_dict(str(fpath), encoding="utf-16") == [
+def test_read_csv():
+    assert load_csv_as_list(str(TEST_CSV), encoding="utf-16") == [["id", "title"], ["10", "itemA"], ["20", "itemB"]]
+    assert load_csv_as_dict(str(TEST_CSV), encoding="utf-16") == [
         {"id": "10", "title": "itemA"},
         {"id": "20", "title": "itemB"},
     ]
