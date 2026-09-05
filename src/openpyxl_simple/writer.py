@@ -2,18 +2,18 @@ import csv
 
 import openpyxl
 
+from openpyxl_simple.decorator import deco_fname_check, deco_to_path
 from openpyxl_simple.styles import write_cell
-from openpyxl_simple.utils import deco_fname_check, to_path
 
+@deco_to_path
 def write_ll(fpath, data):
-    fpath = to_path(fpath)
     if fpath.suffix == ".csv":
         write_csv_ll(fpath, data)
     else:
         write_xlsx_ll(fpath, data)
 
+@deco_to_path
 def write_dict(fpath, header, data):
-    fpath = to_path(fpath)
     if fpath.suffix == ".csv":
         write_csv_dict(fpath, header, data)
     else:
@@ -39,8 +39,8 @@ def write_csv_ll(fpath, data):
 
 # data: list of dict
 @deco_fname_check("xlsx")
+@deco_to_path
 def write_xlsx_dict(fpath, header, data, sheet_name=None, style_func=None):
-    fpath = to_path(fpath)
     if sheet_name is None:
         wb = openpyxl.Workbook()
         ws = wb.active
@@ -68,8 +68,8 @@ def write_ws_dict(ws, header, data, style_func=None):
 
 # use `kwargs={extrasaction: "ignore"}`
 @deco_fname_check("csv")
+@deco_to_path
 def write_csv_dict(fpath, header, data, **kwargs):
-    fpath = to_path(fpath)
     writer = csv.DictWriter(open(fpath, "w", encoding="utf-16"), header, **kwargs)
     writer.writeheader()
     for row in data:

@@ -3,10 +3,11 @@ import os
 
 import openpyxl
 
-from openpyxl_simple.utils import guess_utf_encoding, to_path
+from openpyxl_simple.decorator import deco_to_path
+from openpyxl_simple.encoding import guess_utf_encoding
 
+@deco_to_path
 def load_as_list(fpath):
-    fpath = to_path(fpath)
     if fpath.suffix == ".xlsx" and fpath.exists():
         return load_xlsx_as_list(fpath)
     else:
@@ -36,8 +37,8 @@ def load_ws_as_list(ws):
 def load_csv_as_list(fpath, encoding="utf-16"):
     return list(csv.reader(open(fpath, encoding=encoding)))
 
+@deco_to_path
 def load_as_dict(fpath):
-    fpath = to_path(fpath)
     if fpath.suffix == ".xlsx" and fpath.exists():
         return load_xlsx_as_dict(fpath)
     else:

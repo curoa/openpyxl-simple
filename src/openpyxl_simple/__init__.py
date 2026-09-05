@@ -13,13 +13,6 @@ from openpyxl_simple.styles import (
     sample_style_func,
     write_cell,
 )
-from openpyxl_simple.utils import (
-    collect_header,
-    deco_fname_check,
-    guess_utf_encoding,
-    tie_key_value,
-    to_path,
-)
 from openpyxl_simple.writer import (
     write_csv_dict,
     write_csv_ll,
@@ -32,9 +25,6 @@ from openpyxl_simple.writer import (
 )
 
 __all__ = [
-    "collect_header",
-    "deco_fname_check",
-    "guess_utf_encoding",
     "load_as_dict",
     "load_as_list",
     "load_csv_as_dict",
@@ -45,8 +35,6 @@ __all__ = [
     "load_xlsx_as_list",
     "ptn_fill_gray",
     "sample_style_func",
-    "tie_key_value",
-    "to_path",
     "write_cell",
     "write_csv_dict",
     "write_csv_ll",
