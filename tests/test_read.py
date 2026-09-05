@@ -12,9 +12,9 @@ from openpyxl_simple.reader import (
     load_xlsx_as_list,
 )
 
-TEST_DIR = Path(__file__).parent
-TEST_XLSX = TEST_DIR / "test.xlsx"
-TEST_CSV = TEST_DIR / "test.csv"
+TEST_DIR = Path(__file__).parent / "data"
+SAMPLE_XLSX = TEST_DIR / "sample.xlsx"
+SAMPLE_CSV = TEST_DIR / "sample.csv"
 
 
 def test_read_ws_as_list():
@@ -43,34 +43,34 @@ def test_read_ws_as_dict():
 
 
 def test_read_xlsx():
-    assert load_xlsx_as_list(str(TEST_XLSX)) == [["col1", "col2"], ["val1", "val2"]]
-    assert load_xlsx_as_dict(str(TEST_XLSX)) == [{"col1": "val1", "col2": "val2"}]
-    assert load_xlsx_as_list(str(TEST_XLSX), sheet_name="CustomSheet") == [["name", "score"], ["charlie", 95]]
-    assert load_xlsx_as_dict(str(TEST_XLSX), sheet_name="CustomSheet") == [{"name": "charlie", "score": 95}]
+    assert load_xlsx_as_list(str(SAMPLE_XLSX)) == [["col1", "col2"], ["val1", "val2"]]
+    assert load_xlsx_as_dict(str(SAMPLE_XLSX)) == [{"col1": "val1", "col2": "val2"}]
+    assert load_xlsx_as_list(str(SAMPLE_XLSX), sheet_name="CustomSheet") == [["name", "score"], ["charlie", 95]]
+    assert load_xlsx_as_dict(str(SAMPLE_XLSX), sheet_name="CustomSheet") == [{"name": "charlie", "score": 95}]
 
 
 def test_read_xlsx_data_only():
-    list_formula = load_xlsx_as_list(str(TEST_XLSX), sheet_name="BMI", data_only=False)
+    list_formula = load_xlsx_as_list(str(SAMPLE_XLSX), sheet_name="BMI", data_only=False)
     assert list_formula == [
         ["身長(cm)", "体重(kg)", "BMI"],
         [158, 45, "=B2/((A2/100)^2)"],
         [153, 38, "=B3/((A3/100)^2)"],
     ]
 
-    dict_formula = load_xlsx_as_dict(str(TEST_XLSX), sheet_name="BMI", data_only=False)
+    dict_formula = load_xlsx_as_dict(str(SAMPLE_XLSX), sheet_name="BMI", data_only=False)
     assert dict_formula == [
         {"身長(cm)": 158, "体重(kg)": 45, "BMI": "=B2/((A2/100)^2)"},
         {"身長(cm)": 153, "体重(kg)": 38, "BMI": "=B3/((A3/100)^2)"},
     ]
 
-    list_val = load_xlsx_as_list(str(TEST_XLSX), sheet_name="BMI", data_only=True)
+    list_val = load_xlsx_as_list(str(SAMPLE_XLSX), sheet_name="BMI", data_only=True)
     assert list_val[0] == ["身長(cm)", "体重(kg)", "BMI"]
     assert list_val[1][0] == 158 and list_val[1][1] == 45
     assert round(list_val[1][2], 2) == 18.03
     assert list_val[2][0] == 153 and list_val[2][1] == 38
     assert round(list_val[2][2], 2) == 16.23
 
-    dict_val = load_xlsx_as_dict(str(TEST_XLSX), sheet_name="BMI", data_only=True)
+    dict_val = load_xlsx_as_dict(str(SAMPLE_XLSX), sheet_name="BMI", data_only=True)
     assert dict_val[0]["身長(cm)"] == 158 and dict_val[0]["体重(kg)"] == 45
     assert round(dict_val[0]["BMI"], 2) == 18.03
     assert dict_val[1]["身長(cm)"] == 153 and dict_val[1]["体重(kg)"] == 38
@@ -78,8 +78,8 @@ def test_read_xlsx_data_only():
 
 
 def test_read_csv():
-    assert load_csv_as_list(str(TEST_CSV), encoding="utf-16") == [["id", "title"], ["10", "itemA"], ["20", "itemB"]]
-    assert load_csv_as_dict(str(TEST_CSV), encoding="utf-16") == [
+    assert load_csv_as_list(str(SAMPLE_CSV), encoding="utf-16") == [["id", "title"], ["10", "itemA"], ["20", "itemB"]]
+    assert load_csv_as_dict(str(SAMPLE_CSV), encoding="utf-16") == [
         {"id": "10", "title": "itemA"},
         {"id": "20", "title": "itemB"},
     ]
